@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from .evolutioD import evolition_diferential
+from evolutioD import evolition_diferential
 
 
 data= pd.read_csv('./data/data.tsv', sep='\t')

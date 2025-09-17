@@ -1,6 +1,6 @@
 import numpy as np 
-from .codific import decodificar_vector_de,codificar_configuracion_de
-from .evaluate_config import valuation,valuationI
+from codific import decodificar_vector_de,codificar_configuracion_de
+from evaluate_config import valuation,valuationI
 import random
 
 def evolition_diferential(X,y,population_size=5, num_gene=2, F=0.8, CR=0.9):
@@ -22,7 +22,7 @@ def evolition_diferential(X,y,population_size=5, num_gene=2, F=0.8, CR=0.9):
     best_gen=population[np.argmax(aptitud)]
 
 
-    for num in range(30):
+    for num in range(2):
         for i in range(population_size):
             indiex=[idx for idx in range(population_size) if idx !=i]
             r1,r2,r3= random.sample(indiex,3)
