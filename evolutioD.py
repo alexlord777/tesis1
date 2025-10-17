@@ -3,7 +3,7 @@ from codific import decodificar_vector_de,codificar_configuracion_de
 from evaluate_config import valuation,valuationI
 import random
 
-def evolition_diferential(X,y,population_size=5, num_gene=2, F=0.8, CR=0.9):
+def evolition_differential(X,y,population_size=5, num_gene=2, F=0.8, CR=0.9):
 
     normalModel=valuationI(X,y)
 
@@ -22,7 +22,7 @@ def evolition_diferential(X,y,population_size=5, num_gene=2, F=0.8, CR=0.9):
     best_gen=population[np.argmax(aptitud)]
 
 
-    for num in range(2):
+    for num in range(5):
         for i in range(population_size):
             indiex=[idx for idx in range(population_size) if idx !=i]
             r1,r2,r3= random.sample(indiex,3)
@@ -34,9 +34,11 @@ def evolition_diferential(X,y,population_size=5, num_gene=2, F=0.8, CR=0.9):
             #crossing
             test_vector=np.copy(population[i])
             j_rand=random.randint(0,dimention-1)
+
             for j in range(dimention):
-                random.random() <= CR or j==j_rand
-                test_vector[j]= mutant_vector[j]
+                if random.random() <= CR or j == j_rand:
+                    test_vector[j] = mutant_vector[j]
+
             #Selection 
             test_configuration=decodificar_vector_de(test_vector)
             test_apti=valuation(test_configuration,X,y)
