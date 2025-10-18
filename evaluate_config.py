@@ -2,32 +2,40 @@ import numpy as np
 from microtc.textmodel import TextModel
 from sklearn.model_selection import cross_val_score
 from sklearn.svm import LinearSVC
+import warnings
 
-def valuation(config,x,y,cv=5):
+def valuation(config,X, y,cv=5):
+  
     try:
-        print("paso")
-        model=TextModel(**config)
-        model.fit(x)
-        x_trans=model.transform(x)
-        
-        clf=LinearSVC(random_state=42,dual="auto")
+       
+        # Crear modelo de texto
+        model = TextModel(**config)
+        model.fit(X)
+        X_trans = model.transform(X)
+        # Clasificador base
+        clf = LinearSVC(random_state=42, dual=False)
+        # Evaluación cruzada
+        f1_scores = cross_val_score(clf, X_trans, y, cv=cv, scoring="f1_macro")
+        score = np.mean(f1_scores)
+        return score
 
-        f1_scores=cross_val_score(clf,x_trans,y,cv=cv,scoring='f1_macro')
-        return np.mean(f1_scores)
     except Exception as e:
-        print(f"Error al evaluar la configuración: {config} ")
-        return -1
+        return -np.inf
 
-def valuationI(x,y,cv=5):
+
+def valuationI(X, y, cv=5, ):
     try:
-        model=TextModel()
-        print("pasa1")
-        model.fit(x)
-        print("pasa2")
-        x_trans=model.transform(x)
-        clf=LinearSVC(random_state=42)
-        f1_scores=cross_val_score(clf,x_trans,y,cv=cv,scoring='f1_macro')
-        return np.mean(f1_scores)
+       
+        # Crear modelo de texto
+        model = TextModel() 
+        model.fit(X)
+        X_trans = model.transform(X)
+        # Clasificador base
+        clf = LinearSVC(random_state=42, dual=False)
+        # Evaluación cruzada
+        f1_scores = cross_val_score(clf, X_trans, y, cv=cv, scoring="f1_macro")
+        score = np.mean(f1_scores)
+        return score
+
     except Exception as e:
-       # print(f"Error al evaluar la configuración: {config} ")
-        return -1
+        return -np.inf
