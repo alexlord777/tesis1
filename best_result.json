@@ -1,0 +1,16 @@
+{
+    "best_score": -Infinity,
+    "best_config": {
+        "lc": false,
+        "del_dup": false,
+        "token_list": [
+            -1,
+            3
+        ],
+        "weighting": "tfidf",
+        "del_diac": true,
+        "select_conn": false,
+        "token_min_filter": 0.6666666666666666
+    },
+    "baseline_score": 0.5254084505174426
+}

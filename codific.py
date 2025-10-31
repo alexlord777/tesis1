@@ -7,7 +7,7 @@ espacio_parametros = {
     'weighting': ['tf', 'tfidf'],
     'del_diac': [False, True],
     'select_conn': [False, True],
-    'token_min_filter': list(np.linspace(0.0, 1.0, 10))  # 10 valores discretos
+    'token_min_filter': list(np.linspace(0.0, 1.0, 10))  
 }
 
 
