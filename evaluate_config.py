@@ -1,41 +1,65 @@
 import numpy as np
 from microtc.textmodel import TextModel
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_predict
 from sklearn.svm import LinearSVC
-import warnings
+from sklearn.metrics import (
+    f1_score, precision_score, recall_score, accuracy_score
+)
 
-def valuation(config,X, y,cv=5):
-  
+def valuation(config, X, y, cv=5):
     try:
-       
-        # Crear modelo de texto
         model = TextModel(**config)
         model.fit(X)
         X_trans = model.transform(X)
-        # Clasificador base
+
+        # Si no hay características, penalizar
+        if X_trans.shape[1] == 0:
+            raise ValueError("El modelo no generó características válidas.")
+
         clf = LinearSVC(random_state=42, dual=False)
-        # Evaluación cruzada
-        f1_scores = cross_val_score(clf, X_trans, y, cv=cv, scoring="f1_macro")
-        score = np.mean(f1_scores)
-        return score
+
+        # Validación cruzada por predicción
+        y_pred = cross_val_predict(clf, X_trans, y, cv=cv)
+
+        # Calcular métricas
+        precision = precision_score(y, y_pred, average="macro", zero_division=0)
+        recall = recall_score(y, y_pred, average="macro", zero_division=0)
+        f1 = f1_score(y, y_pred, average="macro", zero_division=0)
+        accuracy = accuracy_score(y, y_pred)
+
+        return {
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+            "accuracy": accuracy
+        }
 
     except Exception as e:
-        return -np.inf
+        print(f"Error en valuation(): {e}")
+        return {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": -np.inf,
+            "accuracy": 0.0
+        }
 
 
-def valuationI(X, y, cv=5, ):
+def valuationI(X, y, cv=5):
     try:
-       
-        # Crear modelo de texto
-        model = TextModel() 
+        model = TextModel()
         model.fit(X)
         X_trans = model.transform(X)
-        # Clasificador base
+
+        if X_trans.shape[1] == 0:
+            raise ValueError("El modelo no generó características válidas.")
+
         clf = LinearSVC(random_state=42, dual=False)
-        # Evaluación cruzada
-        f1_scores = cross_val_score(clf, X_trans, y, cv=cv, scoring="f1_macro")
-        score = np.mean(f1_scores)
-        return score
+        y_pred = cross_val_predict(clf, X_trans, y, cv=cv)
+
+        f1 = f1_score(y, y_pred, average="macro", zero_division=0)
+
+        return f1  # Solo devuelves F1 base
 
     except Exception as e:
+        print(f"Error en valuationI(): {e}")
         return -np.inf
